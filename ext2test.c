@@ -55,8 +55,6 @@ int main(int argc, char *argv[]) {
   printf("Last mounted on       : %s\n", volume->super.s_last_mounted);
   printf("File system version   : %" PRIu32 ".%" PRIu16 "\n",
 	 volume->super.s_rev_level, volume->super.s_minor_rev_level);
-  printf("Status                : %" PRIu16 " - %s\n\n", volume->super.s_state,
-	 volume->super.s_state == EXT2_VALID_FS ? "Unmounted cleanly" : "Errors detected");
   
   printf("Total size (in bytes) : %" PRIu32 "\n", volume->volume_size);
   printf("Block size (in bytes) : %" PRIu32 "\n", volume->block_size);
