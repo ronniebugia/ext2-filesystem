@@ -1,0 +1,7 @@
+ext12fs
+ext12test
+*.o
+*~
+*.swp
+*.swo
+*.img
