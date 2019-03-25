@@ -30,6 +30,23 @@
 volume_t *open_volume_file(const char *filename) {
   
   /* TO BE COMPLETED BY THE STUDENT */
+
+  FILE *fileptr;
+  unsigned char *buffer;
+  int i;
+
+  buffer = (unsigned char *) malloc((256)*sizeof(unsigned char));
+
+  fileptr = fopen(filename, "rb"); // opened in binary mode
+  // fseek(fileptr, 1024, SEEK_SET); // offset to superblock (1024 bytes)
+  for (i = 0; i < 256; i++) {
+    fread(buffer+i, 1, 1, fileptr);
+  }
+  for (i = 0; i < 256; i++) {
+    printf("%02x", buffer[i]);
+  }
+  fclose(fileptr);
+  
   return NULL;
 }
 
