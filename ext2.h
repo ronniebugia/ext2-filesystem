@@ -181,6 +181,12 @@ ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer);
 ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer);
 ssize_t read_file_content(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer);
 
+// HELPERS
+unsigned char* read_bytes(FILE* fileptr, unsigned int noBytes);
+uint32_t make_uint32(unsigned char* bytes);
+uint16_t make_uint16(unsigned char* bytes);
+uint8_t make_uint8(unsigned char* bytes);
+
 uint32_t follow_directory_entries(volume_t *volume, inode_t *inode, void *context,
 				  dir_entry_t *buffer,
 				  int (*f)(const char *name, uint32_t inode_no, void *context));
