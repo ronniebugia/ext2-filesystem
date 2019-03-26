@@ -32,22 +32,103 @@ volume_t *open_volume_file(const char *filename) {
   /* TO BE COMPLETED BY THE STUDENT */
 
   FILE *fileptr;
-  unsigned char *buffer;
-  int i;
-
-  buffer = (unsigned char *) malloc((256)*sizeof(unsigned char));
-
+  
+  volume_t *volume;
+  volume = malloc(sizeof(volume_t));
+  
   fileptr = fopen(filename, "rb"); // opened in binary mode
-  // fseek(fileptr, 1024, SEEK_SET); // offset to superblock (1024 bytes)
-  for (i = 0; i < 256; i++) {
-    fread(buffer+i, 1, 1, fileptr);
-  }
-  for (i = 0; i < 256; i++) {
-    printf("%02x", buffer[i]);
-  }
+  fseek(fileptr, EXT2_OFFSET_SUPERBLOCK, SEEK_SET); // offset to superblock (1024)
+  
+  // PARSE SUPERBLOCK
+  superblock_t *superblock;
+  superblock = malloc(sizeof(superblock_t));
+  superblock->s_inodes_count = make_uint32(read_bytes(fileptr, 4)); // 0
+  superblock->s_blocks_count = make_uint32(read_bytes(fileptr, 4)); // 4
+  superblock->s_r_blocks_count = make_uint32(read_bytes(fileptr, 4)); // 8
+  superblock->s_free_blocks_count = make_uint32(read_bytes(fileptr, 4)); // 12
+  superblock->s_free_inodes_count = make_uint32(read_bytes(fileptr, 4)); // 16
+  superblock->s_first_data_block = make_uint32(read_bytes(fileptr, 4)); // 20
+  superblock->s_log_block_size = make_uint32(read_bytes(fileptr, 4)); // 24
+  superblock->s_log_frag_size = make_uint32(read_bytes(fileptr, 4)); // 28
+  superblock->s_blocks_per_group = make_uint32(read_bytes(fileptr, 4)); // 32
+  superblock->s_frags_per_group = make_uint32(read_bytes(fileptr, 4)); // 36
+  superblock->s_inodes_per_group = make_uint32(read_bytes(fileptr, 4)); // 40
+  superblock->s_mtime = make_uint32(read_bytes(fileptr, 4)); // 44
+  superblock->s_wtime = make_uint32(read_bytes(fileptr, 4)); // 48
+  superblock->s_mnt_count = make_uint16(read_bytes(fileptr, 2)); // 52
+  superblock->s_max_mnt_count = make_uint16(read_bytes(fileptr, 2)); // 43
+  superblock->s_magic = make_uint16(read_bytes(fileptr, 2)); // 56
+  superblock->s_state = make_uint16(read_bytes(fileptr, 2)); // 58
+  superblock->s_errors = make_uint16(read_bytes(fileptr, 2)); // 60
+  superblock->s_minor_rev_level = make_uint16(read_bytes(fileptr, 2)); // 62
+  superblock->s_lastcheck = make_uint32(read_bytes(fileptr, 4)); // 64
+  superblock->s_checkinterval = make_uint32(read_bytes(fileptr, 4)); // 68
+  superblock->s_creator_os = make_uint32(read_bytes(fileptr, 4)); // 72
+  superblock->s_rev_level = make_uint32(read_bytes(fileptr, 4)); // 76
+  superblock->s_def_resuid = make_uint16(read_bytes(fileptr, 2)); // 80
+  superblock->s_def_resgid = make_uint16(read_bytes(fileptr, 2)); // 82
+  superblock->s_first_ino = make_uint32(read_bytes(fileptr, 4)); // 84
+  superblock->s_inode_size = make_uint16(read_bytes(fileptr, 2)); // 88
+  superblock->s_block_group_nr = make_uint16(read_bytes(fileptr, 2)); // 90
+  superblock->s_feature_compat = make_uint32(read_bytes(fileptr, 4)); // 92
+  superblock->s_feature_incompat = make_uint32(read_bytes(fileptr, 4)); // 96
+  superblock->s_feature_ro_compat = make_uint32(read_bytes(fileptr, 4)); // 100
+  // TODO: parsing UUID, volume names, last mounted, bitmap
+  
+  volume->super = *superblock;
+  
   fclose(fileptr);
   
-  return NULL;
+  return volume;
+}
+
+/* HELPER - read_bytes: Reads a specified number of bytes from the file pointer.
+
+   Parameters:
+     fileptr: pointer to the file currently being read
+     noBytes: number of bytes to read
+*/
+unsigned char* read_bytes(FILE* fileptr, unsigned int noBytes) {
+  unsigned char *bytes;
+  bytes = malloc (sizeof(unsigned char) * noBytes);
+  fread(bytes, 1, noBytes, fileptr);
+  /* for (int i = 0; i < noBytes; i++)
+    printf("%02x\n", bytes[i]); */
+  return bytes;
+}
+
+/* HELPER - make_uint32: Reads 4 bytes in Little Endian and converts to a 32-bit unsigned int.
+
+   Parameters:
+      bytes: array of 4 unsigned chars to be converted
+*/
+uint32_t make_uint32(unsigned char* bytes) {
+  uint32_t num = (uint32_t) bytes[3] << 24 |
+    (uint32_t) bytes[2] << 16 |
+    (uint32_t) bytes[1] << 8 |
+    (uint32_t) bytes[0];
+  return num;
+}
+
+/* HELPER - make_uint16: Reads 2 bytes in Little Endian and converts to a 16-bit unsigned int.
+
+   Parameters:
+      bytes: array of 2 unsigned chars to be converted
+*/
+uint16_t make_uint16(unsigned char* bytes) {
+  uint16_t num = (uint16_t) bytes[1] << 8 |
+    (uint16_t) bytes[0];
+  return num;
+}
+
+/* HELPER - make_uint8: Reads 1 byte in Little Endian and converts to a 8-bit unsigned int.
+
+   Parameters:
+      bytes: array of 1 unsigned char to be converted
+*/
+uint8_t make_uint8(unsigned char* bytes) {
+  uint8_t num = (uint8_t) bytes[0];
+  return num;
 }
 
 /* close_volume_file: Frees and closes all resources used by a EXT2 volume.
