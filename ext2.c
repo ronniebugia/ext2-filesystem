@@ -45,16 +45,14 @@ volume_t *open_volume_file(const char *filename) {
   superblock = malloc(sizeof(superblock_t));
   read(filedesc, superblock, sizeof(superblock_t));
   volume->super = *superblock;
-
+  free(superblock);
+  
   // BLOCK SIZE, VOLUME SIZE, NUM_GROUPS
-  volume->block_size = 1024 << superblock->s_log_block_size;
-  volume->volume_size = superblock->s_blocks_count * volume->block_size;
-  volume->num_groups = superblock->s_blocks_count / superblock->s_blocks_per_group;
+  volume->block_size = 1024 << volume->super.s_log_block_size;
+  volume->volume_size = volume->super.s_blocks_count * volume->block_size;
+  volume->num_groups = volume->super.s_blocks_count / volume->super.s_blocks_per_group;
   
   // SEEK TO GROUP DESCRIPTOR TABLE
-  /* "The block group descriptor table starts on the first block following
-     the superblock. This would be the third block on a 1KiB block file
-     system, or the second block for 2KiB and larger block file systems." */
   if (volume->block_size >= 2048)
     lseek(filedesc, volume->block_size * 2, SEEK_SET);
   else
@@ -62,8 +60,8 @@ volume_t *open_volume_file(const char *filename) {
   
   // PARSE GROUP DESCRIPTOR TABLE
   group_desc_t *groups;
-  groups = malloc(sizeof(group_desc_t));
-  read(filedesc, groups, sizeof(group_desc_t));
+  groups = malloc(sizeof(group_desc_t) * volume->num_groups);
+  read(filedesc, groups, sizeof(group_desc_t) * volume->num_groups);
   volume->groups = groups;
 
   return volume;
@@ -75,9 +73,8 @@ volume_t *open_volume_file(const char *filename) {
      volume: pointer to volume to be freed.
  */
 void close_volume_file(volume_t *volume) {
-  //free(volume);
-  //close(volume->fd);
-  /* TO BE COMPLETED BY THE STUDENT */
+  close(volume->fd);
+  free(volume);
 }
 
 /* read_block: Reads data from one or more blocks. Saves the resulting
