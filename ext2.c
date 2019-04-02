@@ -29,8 +29,6 @@
  */
 volume_t *open_volume_file(const char *filename) {
   
-  /* TO BE COMPLETED BY THE STUDENT */
-
   int filedesc; // file descriptor
   volume_t *volume;
   volume = malloc(sizeof(volume_t));
@@ -96,8 +94,15 @@ void close_volume_file(volume_t *volume) {
  */
 ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_t size, void *buffer) {
 
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -1;
+  if (block_no == 0) {
+    for (int i = 0; i < size; i++) {
+      memset(buffer+i, 0, sizeof(int));
+    }
+    return size;
+  }
+  
+  lseek(volume->fd, block_no * volume->block_size + offset, SEEK_SET);
+  return read(volume->fd, buffer, size);
 }
 
 /* read_inode: Fills an inode data structure with the data from one
@@ -116,9 +121,17 @@ ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_
      returns -1.
  */
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
+
+  // determine block group number and index within the group from the inode number
+  int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
+  int local_inode_index = (inode_no - 1) % volume->super.s_inodes_per_group;
+  
+  // read inode from inode table into corresponding group
+  read_block(volume, block_group, local_inode_index, sizeof(inode_t), buffer);
+  printf("READ INODE: %d", buffer->i_mode);
   
   /* TO BE COMPLETED BY THE STUDENT */
-  return -1;
+  return 1; // need error checking
 }
 
 /* read_ind_block_entry: Reads one entry from an indirect
