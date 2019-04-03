@@ -122,16 +122,18 @@ ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_
  */
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
 
+  /// change to return read_block ??
+
   // determine block group number and index within the group from the inode number
   int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
   int local_inode_index = (inode_no - 1) % volume->super.s_inodes_per_group;
   
   // read inode from inode table into corresponding group
-  read_block(volume, block_group, local_inode_index, sizeof(inode_t), buffer);
   printf("READ INODE: %d", buffer->i_mode);
+  return read_block(volume, block_group, local_inode_index, sizeof(inode_t), buffer);
   
   /* TO BE COMPLETED BY THE STUDENT */
-  return 1; // need error checking
+  // return 1; // need error checking
 }
 
 /* read_ind_block_entry: Reads one entry from an indirect
@@ -171,7 +173,12 @@ static uint32_t read_ind_block_entry(volume_t *volume, uint32_t ind_block_no,
      EXT2_INVALID_BLOCK_NUMBER.
  */
 static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint32_t block_idx) {
-  
+
+  // determine block group number within the group from the inode number
+  int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
+
+
+
   /* TO BE COMPLETED BY THE STUDENT */
   return EXT2_INVALID_BLOCK_NUMBER;
 }
@@ -192,9 +199,10 @@ static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint32_t bl
      disk. In case of error, returns -1.
  */
 ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer) {
-    
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -1;
+  // because offset = block_size * block
+  uint32_t block_no = get_inode_block_no(volume, inode, offset / volume->block_size);
+  // printf("READ INODE: %d", buffer->i_mode);
+  return read_block(volume, block_no, offset % block_size, max_size, buffer);
 }
 
 /* read_file_content: Returns the content of a specific file, limited
