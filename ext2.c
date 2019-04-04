@@ -123,13 +123,11 @@ ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
 
   /// change to return read_block ??
-  printf("READING INODE");
   // determine block group number and index within the group from the inode number
   int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
   int local_inode_index = (inode_no - 1) % volume->super.s_inodes_per_group;
   
   // read inode from inode table into corresponding group
-  printf("READ INODE: %d", buffer->i_mode);
   return read_block(volume, block_group, local_inode_index, sizeof(inode_t), buffer);
   
   /* TO BE COMPLETED BY THE STUDENT */
@@ -309,19 +307,23 @@ uint32_t follow_directory_entries(volume_t *volume, inode_t *inode, void *contex
   // somehow read entries in the directory
   // for entry, call function f with arg context
   int next_offset = 0;
-  for (int i = 0; i < inode_file_size(volume, inode); i++) {
-    int block_no = get_inode_block_no(volume, inode, i);
-    dir_entry_t *dir_entry;
-    dir_entry = malloc(sizeof(dir_entry_t));
-    read_block(volume, block_no, next_offset, sizeof(dir_entry_t), dir_entry);
-    printf(dir_entry->de_name);
+  int retval = 0;
+  dir_entry_t *dir_entry;
+  dir_entry = malloc(sizeof(dir_entry_t));
+  printf("num blocks: %d\n", inode->i_size);  
+  for (int i = 0; i < inode->i_size; i++) {
+    // int block_no = get_inode_block_no(volume, inode, i);
+    read_file_content(volume, inode, next_offset, sizeof(dir_entry_t), dir_entry);
+    printf("filename read: %s", dir_entry->de_name);
     if ((*f)(dir_entry->de_name, dir_entry->de_inode_no, context) > 0) {
-      return dir_entry->de_inode_no;
+      retval = dir_entry->de_inode_no;
+      break;
     }
     next_offset += dir_entry->de_rec_len;
   }
 
-  return 0;
+  free(dir_entry);
+  return retval;
 }
 
 /* Simple comparing function to be used as argument in find_file_in_directory function */
@@ -349,7 +351,7 @@ static int compare_file_name(const char *name, uint32_t inode_no, void *context)
      data, returns 0 (zero).
  */
 uint32_t find_file_in_directory(volume_t *volume, inode_t *inode, const char *name, dir_entry_t *buffer) {
-  
+  printf("finding file: %s\n", name);
   return follow_directory_entries(volume, inode, (char *) name, buffer, compare_file_name);
 }
 
@@ -387,18 +389,22 @@ uint32_t find_file_from_path(volume_t *volume, const char *path, inode_t *dest_i
 
   int curr_inode = 0;
   
-  while (1) {
+  read_inode(volume, curr_inode, dir_inode);
+  printf("dir_inode size: %d\n", dir_inode->i_size);
+  curr_inode = find_file_in_directory(volume, dir_inode, "/", dir_entry); // start search with root
+  
+  while (token && curr_inode > 0) {
     read_inode(volume, curr_inode, dir_inode);
-    curr_inode = find_file_in_directory(volume, dir_inode, token, dir_entry);  
     token = strtok(0, "/");
-    if (token == NULL)
-      break;
+    curr_inode = find_file_in_directory(volume, dir_inode, token, dir_entry);  
   }
 
+  free(dir_inode);
+  free(dir_entry);
+  free(path_str);
+    
   if (curr_inode > 0) {
     read_inode(volume, curr_inode, dest_inode);
-    free(dir_inode);
-    free(dir_entry);
     return curr_inode;
   }
 
