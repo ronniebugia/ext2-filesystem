@@ -123,7 +123,7 @@ ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
 
   /// change to return read_block ??
-
+  printf("READING INODE");
   // determine block group number and index within the group from the inode number
   int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
   int local_inode_index = (inode_no - 1) % volume->super.s_inodes_per_group;
@@ -152,10 +152,12 @@ ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
 static uint32_t read_ind_block_entry(volume_t *volume, uint32_t ind_block_no,
 				     uint32_t index) {
 
-  
-  
-  /* TO BE COMPLETED BY THE STUDENT */
-  return 0;
+  int block_no;
+  int retval = read_block(volume, ind_block_no, index * 4, 4, &block_no); 
+  if (retval > 0)
+    return block_no;
+  else
+    return EXT2_INVALID_BLOCK_NUMBER;
 }
 
 /* read_inode_block_no: Returns the block number containing the data
@@ -304,7 +306,21 @@ uint32_t follow_directory_entries(volume_t *volume, inode_t *inode, void *contex
 				  dir_entry_t *buffer,
 				  int (*f)(const char *name, uint32_t inode_no, void *context)) {
 
-  /* TO BE COMPLETED BY THE STUDENT */
+  // somehow read entries in the directory
+  // for entry, call function f with arg context
+  int next_offset = 0;
+  for (int i = 0; i < inode_file_size(volume, inode); i++) {
+    int block_no = get_inode_block_no(volume, inode, i);
+    dir_entry_t *dir_entry;
+    dir_entry = malloc(sizeof(dir_entry_t));
+    read_block(volume, block_no, next_offset, sizeof(dir_entry_t), dir_entry);
+    printf(dir_entry->de_name);
+    if ((*f)(dir_entry->de_name, dir_entry->de_inode_no, context) > 0) {
+      return dir_entry->de_inode_no;
+    }
+    next_offset += dir_entry->de_rec_len;
+  }
+
   return 0;
 }
 
@@ -358,6 +374,33 @@ uint32_t find_file_in_directory(volume_t *volume, inode_t *inode, const char *na
  */
 uint32_t find_file_from_path(volume_t *volume, const char *path, inode_t *dest_inode) {
 
-  /* TO BE COMPLETED BY THE STUDENT */
+  inode_t *dir_inode;
+  dir_inode = malloc(sizeof(inode_t));
+
+  dir_entry_t *dir_entry;
+  dir_entry = malloc(sizeof(inode_t));
+
+  char *path_str = malloc(strlen(path) + 1); // extra for null 
+  strcpy(path_str, path);
+
+  char* token = strtok(path_str, "/");
+
+  int curr_inode = 0;
+  
+  while (1) {
+    read_inode(volume, curr_inode, dir_inode);
+    curr_inode = find_file_in_directory(volume, dir_inode, token, dir_entry);  
+    token = strtok(0, "/");
+    if (token == NULL)
+      break;
+  }
+
+  if (curr_inode > 0) {
+    read_inode(volume, curr_inode, dest_inode);
+    free(dir_inode);
+    free(dir_entry);
+    return curr_inode;
+  }
+
   return 0;
 }
