@@ -151,6 +151,8 @@ ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
  */
 static uint32_t read_ind_block_entry(volume_t *volume, uint32_t ind_block_no,
 				     uint32_t index) {
+
+  
   
   /* TO BE COMPLETED BY THE STUDENT */
   return 0;
@@ -175,11 +177,45 @@ static uint32_t read_ind_block_entry(volume_t *volume, uint32_t ind_block_no,
 static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint32_t block_idx) {
 
   // determine block group number within the group from the inode number
-  int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
+  // int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
 
+  int block_size = volume->block_size;
+  int num_entries = block_size / 4; // each entry is 4 bytes
 
+  int num_single_entries = num_entries;
+  int num_double_entries = num_entries * num_entries;
+  int num_triple_entries = num_entries * num_entries * num_entries;
+  
+  int first_indirect_block = 12;
+  int first_double_indirect_block = first_indirect_block + num_single_entries;
+  int first_triple_indirect_block = first_double_indirect_block + num_double_entries;
+  int max_valid_index = first_triple_indirect_block + num_triple_entries;
 
-  /* TO BE COMPLETED BY THE STUDENT */
+  
+  if (block_idx < 12) { // direct blocks
+    return inode->i_block[block_idx];
+  }
+
+  else if (block_idx >= first_indirect_block && block_idx < first_double_indirect_block) { // single indirect block
+    return read_ind_block_entry(volume, inode->i_block_1ind, block_idx - first_indirect_block);
+  }
+
+  else if (block_idx >= first_double_indirect_block && block_idx < first_triple_indirect_block) { // double indirect block
+    int tmp;
+    int local_index = (block_idx - first_double_indirect_block) / num_double_entries;
+    tmp = read_ind_block_entry(volume, inode->i_block_2ind, local_index);
+    return read_ind_block_entry(volume, tmp, block_idx - first_double_indirect_block);
+  }
+
+  else if (block_idx >= first_triple_indirect_block && block_idx < max_valid_index) { // triple indirect block
+    int tmp;
+    int local_index = ((block_idx - first_triple_indirect_block) / num_double_entries) / num_triple_entries;
+    tmp = read_ind_block_entry(volume, inode->i_block_3ind, local_index);
+    local_index = (block_idx - first_triple_indirect_block) / num_double_entries;
+    tmp = read_ind_block_entry(volume, tmp, local_index);
+    return read_ind_block_entry(volume, tmp, block_idx - first_triple_indirect_block);
+  }
+
   return EXT2_INVALID_BLOCK_NUMBER;
 }
 
@@ -202,7 +238,7 @@ ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint3
   // because offset = block_size * block
   uint32_t block_no = get_inode_block_no(volume, inode, offset / volume->block_size);
   // printf("READ INODE: %d", buffer->i_mode);
-  return read_block(volume, block_no, offset % block_size, max_size, buffer);
+  return read_block(volume, block_no, offset % volume->block_size, max_size, buffer);
 }
 
 /* read_file_content: Returns the content of a specific file, limited
