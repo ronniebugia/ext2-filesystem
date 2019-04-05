@@ -151,8 +151,6 @@ ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
   // read inode from inode table into corresponding group
   return read_block(volume, inode_table, offset, size, buffer);
   
-  /* TO BE COMPLETED BY THE STUDENT */
-  // return 1; // need error checking
 }
 
 /* read_ind_block_entry: Reads one entry from an indirect
