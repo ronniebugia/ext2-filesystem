@@ -60,7 +60,8 @@ volume_t *open_volume_file(const char *filename) {
   // BLOCK SIZE, VOLUME SIZE, NUM_GROUPS
   volume->block_size = 1024 << volume->super.s_log_block_size;
   volume->volume_size = volume->super.s_blocks_count * volume->block_size;
-  volume->num_groups = volume->super.s_blocks_count / volume->super.s_blocks_per_group;
+  volume->num_groups = (volume->super.s_blocks_count + volume->super.s_blocks_per_group - 1) / volume->super.s_blocks_per_group;
+  printf("num groups: %d\n", volume->num_groups);
   
   // SEEK TO GROUP DESCRIPTOR TABLE
   if (volume->block_size >= 2048)
@@ -107,10 +108,8 @@ void close_volume_file(volume_t *volume) {
 ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_t size, void *buffer) {
 
   if (block_no == 0) {
-    for (int i = 0; i < size; i++) {
-      memset(buffer+i, 0, sizeof(int));
-    }
-    return size;
+    memset(buffer, 0, size);
+    return 0;
   }
   
   lseek(volume->fd, block_no * volume->block_size + offset, SEEK_SET);
@@ -134,12 +133,16 @@ ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_
  */
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer) {
 
+  if (inode_no == 0)
+    return -1;
+  
   /// change to return read_block ??
   // determine block group number and index within the group from the inode number
-  printf("%s", volume->super.s_volume_name);
+  //printf("volume last mounted: %s\n", volume->super.s_last_mounted);
+  //printf("inode num: %d\n", inode_no);
   int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
   uint32_t inode_table = volume->groups[block_group].bg_inode_table;
-  printf("inode_no: %d, block_group: %d, inode_table %d\n", inode_no, block_group, inode_table);
+  //printf("block_group: %d, inode_table %d\n", block_group, inode_table);
   
   int local_inode_index = (inode_no - 1) % volume->super.s_inodes_per_group;
   uint32_t offset = local_inode_index * volume->super.s_inode_size;
@@ -323,23 +326,37 @@ uint32_t follow_directory_entries(volume_t *volume, inode_t *inode, void *contex
 				  dir_entry_t *buffer,
 				  int (*f)(const char *name, uint32_t inode_no, void *context)) {
 
+  //printf("follow_directory_entries");
+  if ((inode->i_mode >> 12) != 4)
+    return 0;
+
   // somehow read entries in the directory
   // for entry, call function f with arg context
   int next_offset = 0;
-  int retval = -1;
+  int retval = 0;
   int inode_size = inode_file_size(volume, inode);
   dir_entry_t *dir_entry;
   dir_entry = malloc(sizeof(dir_entry_t));
-  
-  printf("num blocks: %d\n", inode->i_size);  
-  while (next_offset != inode_size && retval == -1) {
+
+  while (next_offset < inode_size) {
     // int block_no = get_inode_block_no(volume, inode, i);
     ssize_t bytes_read = read_file_content(volume, inode, next_offset, sizeof(dir_entry_t), dir_entry);
     if (bytes_read == -1)
-      return 0;
-    printf("filename read: %s\n", dir_entry->de_name);
-    if (f(dir_entry->de_name, dir_entry->de_inode_no, context) > 0) {
+      break;
+    if (dir_entry->de_inode_no == 0) // means null
+      break;
+    //printf("filename read: %s\n", dir_entry->de_name);
+
+    char* tmp_de_name = malloc(sizeof(char) * (dir_entry->de_name_len + 1));
+    memcpy(tmp_de_name, dir_entry->de_name, dir_entry->de_name_len);
+    tmp_de_name[dir_entry->de_name_len] = '\0';
+    int result = f(tmp_de_name, dir_entry->de_inode_no, context);
+    if (result > 0) {
+      dir_entry->de_name[dir_entry->de_name_len] = '\0';
+      dir_entry->de_name_len = dir_entry->de_name_len + 1;
       retval = dir_entry->de_inode_no;
+      if (buffer != NULL) // copy into the buffer
+	memcpy(buffer, dir_entry, sizeof(dir_entry_t)); 
       break;
     }
     next_offset += dir_entry->de_rec_len;
@@ -374,7 +391,7 @@ static int compare_file_name(const char *name, uint32_t inode_no, void *context)
      data, returns 0 (zero).
  */
 uint32_t find_file_in_directory(volume_t *volume, inode_t *inode, const char *name, dir_entry_t *buffer) {
-  printf("finding file: %s\n", name);
+  //printf("finding file: %s\n", name);
   return follow_directory_entries(volume, inode, (char *) name, buffer, compare_file_name);
 }
 
@@ -401,10 +418,9 @@ uint32_t find_file_from_path(volume_t *volume, const char *path, inode_t *dest_i
   inode_t *dir_inode;
   dir_inode = malloc(sizeof(inode_t));
 
-  dir_entry_t *dir_entry;
-  dir_entry = malloc(sizeof(inode_t));
-  char *path_str = malloc(strlen(path) + 1); // extra for null 
+  char *path_str = malloc(sizeof(char) * (strlen(path) + 1)); // extra for null 
   strcpy(path_str, path);
+
   char* token = strtok(path_str, "/");
   
   int curr_inode = 2;
@@ -412,15 +428,18 @@ uint32_t find_file_from_path(volume_t *volume, const char *path, inode_t *dest_i
   read_inode(volume, curr_inode, dir_inode);
 
   if (token == NULL) { // looking for root directory
+    //printf("root found\n");
     memcpy(dest_inode, dir_inode, volume->super.s_inode_size);
     free(dir_inode);
-    free(dir_entry);
     free(path_str);
-    return curr_inode;
+    return 2;
   }
 
+  dir_entry_t *dir_entry;
+  dir_entry = malloc(sizeof(dir_entry_t));
+
   while (token != NULL && curr_inode > 0) {
-    printf("/%s\n", token);
+    //printf("/%s\n", token);
     curr_inode = find_file_in_directory(volume, dir_inode, token, dir_entry); 
     if (curr_inode == 0) {
       free(dir_inode);
