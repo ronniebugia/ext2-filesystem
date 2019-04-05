@@ -88,9 +88,18 @@ static void ext2_destroy(void *private_data) {
      return -ENOENT.
  */
 static int ext2_getattr(const char *path, struct stat *stbuf) {
+  inode_t *dest_inode;
+  dest_inode = malloc(sizeof(inode_t));
+  int result = find_file_from_path(volume, path, dest_inode);
+  if (result != 0) {
+    // need to do more explicitly with fields
+    stbuf-> = dest_inode;
 
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -ENOSYS; // Function not implemented
+    
+    return 0;
+  } else {
+    return -ENOSYS;
+  }
 }
 
 /* ext2_readdir: Function called when a process requests the listing
@@ -123,6 +132,29 @@ static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
   /* TO BE COMPLETED BY THE STUDENT */
   return -ENOSYS; // Function not implemented
+
+  // find file from path
+  // follow directory entries
+  // 
+
+  inode_t *dest_inode;
+  int result = find_file_from_path(volume, path, dest_inode);
+  // helper for filler function
+  follow_directory_entries(volume, &dest_inode, volume, NULL, filler_helper);
+  // follow_directory_entries(volume_t *volume, inode_t *inode, void *context,
+  //         dir_entry_t *buffer,
+  //         int (*f)(const char *name, uint32_t inode_no, void *context))
+  if (result != 0) {
+    // need to do more explicitly with fields
+    stbuf = dest_inode;
+    return 0;
+  } else {
+    return -ENOSYS;
+  }
+}
+
+static string filler_helper() {
+
 }
 
 /* ext2_open: Function called when a process opens a file in the file
@@ -149,6 +181,19 @@ static int ext2_open(const char *path, struct fuse_file_info *fi) {
   
   if (fi->flags & O_WRONLY || fi->flags & O_RDWR)
     return -EACCES;
+
+  // find file from path
+
+  inode_t *dest_inode;
+  int result = find_file_from_path(volume, path, dest_inode);
+  if (result != 0) {
+    // need to do more explicitly with fields
+    // set fi -> - 1 ?
+    stbuf = dest_inode;
+    return 0;
+  } else {
+    return -ENOSYS;
+  }
 
   /* TO BE COMPLETED BY THE STUDENT */
   return -ENOSYS; // Function not implemented
@@ -198,6 +243,8 @@ static int ext2_release(const char *path, struct fuse_file_info *fi) {
 static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
 		      struct fuse_file_info *fi) {
 
+  // read file content
+
   /* TO BE COMPLETED BY THE STUDENT */
   return -ENOSYS; // Function not implemented
 }
@@ -221,6 +268,8 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
  */
 static int ext2_readlink(const char *path, char *buf, size_t size) {
 
+// file from file from path
+  // read file content
   /* TO BE COMPLETED BY THE STUDENT */
   return -ENOSYS; // Function not implemented
 }
