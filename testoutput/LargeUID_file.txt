@@ -1,0 +1,84 @@
+Volume name           : 
+Last mounted on       : /media/ext2
+File system version   : 1.0
+Total size (in bytes) : 5242880
+Block size (in bytes) : 1024
+Total number of blocks: 5120
+Total number of inodes: 1280
+No of reserved blocks : 256
+Blocks per group      : 8192
+Inodes per group      : 1280
+
+== BLOCK GROUP 0 ==
+Number of free blocks : 3808
+Number of free inodes : 1258
+No of directory inodes: 5
+
+Root directory:
+  Inode number: 0x2
+  Mode        : 040755
+  Size        : 1024
+  Blocks      : 2
+  Entries:
+         0x2: .
+         0x2: ..
+         0xb: lost+found
+         0xc: file2
+         0xd: d1
+        0x12: ARM
+         0xc: file1
+         0xe: bitshortage.html
+        0x16: UBC-logo-2018-fullsig-blue-rgb300.png
+        0x15: Sparse.txt
+
+Directory d1:
+  Inode number: 0xd
+  Mode        : 040755
+  Size        : 1024
+  Blocks      : 2
+  Entries:
+         0xd: .
+         0x2: ..
+         0xc: termcap
+         0xf: File1.txt
+        0x10: Calendars
+
+Directory d1/d2:
+  NOT FOUND!!!
+
+Directory d1/d2/d3/d4/d5:
+  NOT FOUND!!!
+
+File termcap:
+  NOT FOUND!!!
+
+File d1/File1.txt:
+  Inode number: 0xf
+  Mode        : 0100644
+  Size        : 51
+  Blocks      : 2
+  Content     : This is a really short file with one line of text.
+
+
+File d1/d2/sparse/Bigfile2.txt:
+  NOT FOUND!!!
+
+Symlink ImageInst.txt:
+  NOT FOUND!!!
+
+Full list of files:
+/ (blocks: 0:165)
+  /lost+found (blocks: 0:166 1:167 2:168 3:169 4:170 5:171 6:172 7:173 8:174 9:175 10:176 11:177)
+  /file2 (blocks: 0:513 1:514 2:515 3:516 4:517 5:518 6:519 7:520 8:521 9:522 10:523 11:524 1-IND:178 2-IND:179)
+  /d1 (blocks: 0:184)
+    /termcap (blocks: 0:513 1:514 2:515 3:516 4:517 5:518 6:519 7:520 8:521 9:522 10:523 11:524 1-IND:178 2-IND:179)
+    /File1.txt (blocks: 0:534)
+    /Calendars (blocks: 0:2093)
+      /2019_4up.pdf (blocks: 0:535 1:536 2:537 3:538 4:539 5:540 6:541 7:542 8:543)
+  /ARM (blocks: 0:2094)
+    /Hello World.c (blocks: 0:544 1:545)
+    /assembler.s (blocks: 0:546)
+  /file1 (blocks: 0:513 1:514 2:515 3:516 4:517 5:518 6:519 7:520 8:521 9:522 10:523 11:524 1-IND:178 2-IND:179)
+  /bitshortage.html (blocks: 0:529 1:530 2:531 3:532 4:533)
+  /UBC-logo-2018-fullsig-blue-rgb300.png (blocks: 0:563 1:564 2:565 3:566 4:567 5:568 6:569 7:570 8:571 9:572 10:573 11:574 1-IND:414)
+  /Sparse.txt (blocks: 0:1537 2-IND:413 3-IND:416)
