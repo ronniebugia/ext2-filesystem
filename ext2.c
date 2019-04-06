@@ -193,8 +193,8 @@ static uint32_t read_ind_block_entry(volume_t *volume, uint32_t ind_block_no,
      sparse files. In case of error, returns
      EXT2_INVALID_BLOCK_NUMBER.
  */
-static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint32_t block_idx) {
-
+static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint64_t block_idx) {
+  
   // determine block group number within the group from the inode number
   // int block_group = (inode_no - 1) / volume->super.s_inodes_per_group;
 
@@ -253,7 +253,7 @@ static uint32_t get_inode_block_no(volume_t *volume, inode_t *inode, uint32_t bl
      In case of success, returns the number of bytes read from the
      disk. In case of error, returns -1.
  */
-ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer) {
+ssize_t read_file_block(volume_t *volume, inode_t *inode, uint64_t offset, uint64_t max_size, void *buffer) {
   // because offset = block_size * block
   uint32_t block_no = get_inode_block_no(volume, inode, offset / volume->block_size);
   uint32_t local_offset = offset % volume->block_size;
@@ -277,8 +277,8 @@ ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint3
      In case of success, returns the number of bytes read from the
      disk. In case of error, returns -1.
  */
-ssize_t read_file_content(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer) {
-
+ssize_t read_file_content(volume_t *volume, inode_t *inode, uint64_t offset, uint64_t max_size, void *buffer) {
+  
   uint32_t read_so_far = 0;
 
   if (offset + max_size > inode_file_size(volume, inode))
@@ -349,7 +349,7 @@ uint32_t follow_directory_entries(volume_t *volume, inode_t *inode, void *contex
     memcpy(tmp_de_name, dir_entry->de_name, dir_entry->de_name_len);
     tmp_de_name[dir_entry->de_name_len] = '\0';
     int result = f(tmp_de_name, dir_entry->de_inode_no, context);
-    if (result > 0) {
+    if (result != 0) {
       dir_entry->de_name[dir_entry->de_name_len] = '\0';
       dir_entry->de_name_len = dir_entry->de_name_len + 1;
       retval = dir_entry->de_inode_no;

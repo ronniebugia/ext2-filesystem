@@ -178,8 +178,8 @@ uint32_t ext2_blocksize(volume_t *volume);
 ssize_t read_block(volume_t *volume, uint32_t block_no, uint32_t offset, uint32_t size, void *buffer);
 
 ssize_t read_inode(volume_t *volume, uint32_t inode_no, inode_t *buffer);
-ssize_t read_file_block(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer);
-ssize_t read_file_content(volume_t *volume, inode_t *inode, uint32_t offset, uint32_t max_size, void *buffer);
+ssize_t read_file_block(volume_t *volume, inode_t *inode, uint64_t offset, uint64_t max_size, void *buffer);
+ssize_t read_file_content(volume_t *volume, inode_t *inode, uint64_t offset, uint64_t max_size, void *buffer);
 
 // HELPERS
 unsigned char* read_bytes(FILE* fileptr, unsigned int noBytes);
