@@ -92,9 +92,7 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
   dest_inode = malloc(sizeof(inode_t));
   int result = find_file_from_path(volume, path, dest_inode);
   if (result != 0) {
-    // need to do more explicitly with fields
-    stbuf-> = dest_inode;
-
+   
     
     return 0;
   } else {
@@ -136,7 +134,7 @@ static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
   // find file from path
   // follow directory entries
   // 
-
+  /*
   inode_t *dest_inode;
   int result = find_file_from_path(volume, path, dest_inode);
   // helper for filler function
@@ -150,11 +148,7 @@ static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
     return 0;
   } else {
     return -ENOSYS;
-  }
-}
-
-static string filler_helper() {
-
+    }*/
 }
 
 /* ext2_open: Function called when a process opens a file in the file
@@ -185,11 +179,12 @@ static int ext2_open(const char *path, struct fuse_file_info *fi) {
   // find file from path
 
   inode_t *dest_inode;
+  dest_inode = malloc(sizeof(inode_t));
   int result = find_file_from_path(volume, path, dest_inode);
   if (result != 0) {
     // need to do more explicitly with fields
     // set fi -> - 1 ?
-    stbuf = dest_inode;
+    //stbuf = dest_inode;
     return 0;
   } else {
     return -ENOSYS;
@@ -213,8 +208,7 @@ static int ext2_open(const char *path, struct fuse_file_info *fi) {
  */
 static int ext2_release(const char *path, struct fuse_file_info *fi) {
 
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -ENOSYS; // Function not implemented
+  return 0; // Function not implemented
 }
 
 /* ext2_read: Function called when a process reads data from a file in
@@ -245,8 +239,20 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
 
   // read file content
 
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -ENOSYS; // Function not implemented
+  inode_t *dest_inode;
+  dest_inode = malloc(sizeof(inode_t));
+  int inode_num = find_file_from_path(volume, path, dest_inode);
+
+  if ((dest_inode->i_mode >> 12) != 4)
+    return -EISDIR;
+  if (inode_num == 0)
+    return -ENOENT;
+
+  int bytes_read = read_file_content(volume, dest_inode, offset, size, buf);
+
+  if (bytes_read >= 0)
+    return bytes_read;
+  return -EIO; // Function not implemented
 }
 
 /* ext2_read: Function called when FUSE needs to obtain the target of
@@ -270,6 +276,9 @@ static int ext2_readlink(const char *path, char *buf, size_t size) {
 
 // file from file from path
   // read file content
+  inode_t *dest_inode;
+  dest_inode = malloc(sizeof(inode_t));
+  find_file_from_path(volume, path, dest_inode);
   /* TO BE COMPLETED BY THE STUDENT */
   return -ENOSYS; // Function not implemented
 }
