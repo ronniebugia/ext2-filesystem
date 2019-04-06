@@ -137,14 +137,19 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
 static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi) {
 
-  
+  printf("read directory: %s\n", path);
+
+  inode_t *dir_inode;
+  dir_inode = malloc(sizeof(inode_t));
+  int inode_num = find_file_from_path(volume, path, dir_inode);
+
+  if (inode_num == 0)
+    return -ENOENT;
+
+  follow_directory_entries(volume, dir_inode, context, buf, filler_helper);
 
   return -ENOSYS;
-
-}
-
-static int filler_helper(const char *name, uint32_t inode_no, void *context) {
-  return 0;
+  
 }
 
 /* ext2_open: Function called when a process opens a file in the file
@@ -198,8 +203,8 @@ static int ext2_open(const char *path, struct fuse_file_info *fi) {
      In case of success, returns 0. There is no expected error case.
  */
 static int ext2_release(const char *path, struct fuse_file_info *fi) {
-
-  return 0; // Function not implemented
+  // nothing needs to be freed, return 0
+  return 0; 
 }
 
 /* ext2_read: Function called when a process reads data from a file in
@@ -228,8 +233,6 @@ static int ext2_release(const char *path, struct fuse_file_info *fi) {
 static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
 		      struct fuse_file_info *fi) {
 
-  // read file content
-
   inode_t *dest_inode;
   dest_inode = malloc(sizeof(inode_t));
   int inode_num = find_file_from_path(volume, path, dest_inode);
@@ -243,7 +246,8 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
 
   if (bytes_read >= 0)
     return bytes_read;
-  return -EIO; // Function not implemented
+
+  return -EIO; 
 }
 
 /* ext2_read: Function called when FUSE needs to obtain the target of
@@ -265,12 +269,25 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
  */
 static int ext2_readlink(const char *path, char *buf, size_t size) {
 
-// file from file from path
-  // read file content
   inode_t *dest_inode;
   dest_inode = malloc(sizeof(inode_t));
-  find_file_from_path(volume, path, dest_inode);
-  /* TO BE COMPLETED BY THE STUDENT */
+  int inode_no = find_file_from_path(volume, path, dest_inode);
 
-  return -ENOSYS; // Function not implemented
+  if (inode_no == 0)
+    return -ENOENT;
+  if ((dest_inode->i_mode >> 12) != 10)
+    return -EINVAL;
+  
+  if (dest_inode->i_size < 60) {
+    if (memcpy(buf, dest_inode->i_symlink_target, size) == NULL)
+       return -EIO;
+  } else {
+    int bytes_read = read_file_content(volume, dest_inode, 0, size, buf);
+    buf[size] = '\0';
+    if (bytes_read < 0)
+      return -EIO;
+  }
+  
+  buf[size] = '\0';
+  return 0;
 }
