@@ -61,7 +61,7 @@ volume_t *open_volume_file(const char *filename) {
   volume->block_size = 1024 << volume->super.s_log_block_size;
   volume->volume_size = volume->super.s_blocks_count * volume->block_size;
   volume->num_groups = (volume->super.s_blocks_count + volume->super.s_blocks_per_group - 1) / volume->super.s_blocks_per_group;
-  printf("num groups: %d\n", volume->num_groups);
+  //printf("num groups: %d\n", volume->num_groups);
   
   // SEEK TO GROUP DESCRIPTOR TABLE
   if (volume->block_size >= 2048)
