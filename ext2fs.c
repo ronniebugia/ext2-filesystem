@@ -88,6 +88,9 @@ static void ext2_destroy(void *private_data) {
      return -ENOENT.
  */
 static int ext2_getattr(const char *path, struct stat *stbuf) {
+
+  printf("get attribute: %s\n", path);
+  
   inode_t *dest_inode;
   dest_inode = malloc(sizeof(inode_t));
   int inode_no = find_file_from_path(volume, path, dest_inode);
@@ -103,6 +106,7 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
     stbuf->st_ctime = dest_inode->i_ctime;
     stbuf->st_blksize = volume->block_size;
     stbuf->st_blocks = dest_inode->i_blocks;
+    printf("leaving getattr\n");
     return 0;
   } else {
     return -ENOENT;
@@ -143,19 +147,36 @@ static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
   dir_inode = malloc(sizeof(inode_t));
   int inode_num = find_file_from_path(volume, path, dir_inode);
 
-  if (inode_num == 0)
+  if (inode_num == 0 || (dir_inode->i_mode >> 12) != 4)
     return -ENOENT;
+  
+  struct stat *stbuf;
+  stbuf = malloc(sizeof(struct stat));
+  ext2_getattr(path, stbuf);
+  
+  int filler_wrapper(const char *name, uint32_t inode_no, void *context) {
+    printf("%s\n", name);
+    printf("inode no: %d\n", inode_no);
+    filler(buf, name, NULL, 0);
+    return 0;
+  }
+  
+  int res = follow_directory_entries(volume, dir_inode, NULL, NULL, filler_wrapper);
+  printf("end of readdir\n");
 
-  follow_directory_entries(volume, dir_inode, context, buf, filler_helper);
-
-  return -ENOSYS;
+  
+  if (res == 0)
+    return -ENOENT;
+  
+  return 0;
   
 }
 
 /* ext2_open: Function called when a process opens a file in the file
    system.
    
-   Parameters:
+  
+ Parameters:
      path: Path of the file being opened.
      fi: Data structure containing information about the file being
          opened. Some useful fields include:
