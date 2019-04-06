@@ -90,13 +90,22 @@ static void ext2_destroy(void *private_data) {
 static int ext2_getattr(const char *path, struct stat *stbuf) {
   inode_t *dest_inode;
   dest_inode = malloc(sizeof(inode_t));
-  int result = find_file_from_path(volume, path, dest_inode);
-  if (result != 0) {
-   
-    
+  int inode_no = find_file_from_path(volume, path, dest_inode);
+  if (inode_no != 0) {
+    stbuf->st_ino = inode_no;
+    stbuf->st_mode = dest_inode->i_mode;
+    stbuf->st_nlink = dest_inode->i_links_count;
+    stbuf->st_uid = dest_inode->i_uid;
+    stbuf->st_gid = dest_inode->i_gid;
+    stbuf->st_size = dest_inode->i_size;
+    stbuf->st_atime = dest_inode->i_atime;
+    stbuf->st_mtime = dest_inode->i_mtime;
+    stbuf->st_ctime = dest_inode->i_ctime;
+    stbuf->st_blksize = volume->block_size;
+    stbuf->st_blocks = dest_inode->i_blocks;
     return 0;
   } else {
-    return -ENOSYS;
+    return -ENOENT;
   }
 }
 
@@ -127,28 +136,24 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
  */
 static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi) {
-
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -ENOSYS; // Function not implemented
-
-  // find file from path
-  // follow directory entries
-  // 
-  /*
-  inode_t *dest_inode;
+  /* inode_t *dest_inode;
+  dest_inode = malloc(sizeof(inode_t));
   int result = find_file_from_path(volume, path, dest_inode);
-  // helper for filler function
-  follow_directory_entries(volume, &dest_inode, volume, NULL, filler_helper);
+  if (result != 0) {
+      follow_directory_entries(volume, &dest_inode, volume, NULL, filler_helper);
   // follow_directory_entries(volume_t *volume, inode_t *inode, void *context,
   //         dir_entry_t *buffer,
   //         int (*f)(const char *name, uint32_t inode_no, void *context))
-  if (result != 0) {
-    // need to do more explicitly with fields
-    stbuf = dest_inode;
     return 0;
   } else {
     return -ENOSYS;
     }*/
+  return -ENOSYS;
+
+}
+
+static int filler_helper(const char *name, uint32_t inode_no, void *context) {
+  return 0;
 }
 
 /* ext2_open: Function called when a process opens a file in the file
@@ -176,22 +181,17 @@ static int ext2_open(const char *path, struct fuse_file_info *fi) {
   if (fi->flags & O_WRONLY || fi->flags & O_RDWR)
     return -EACCES;
 
-  // find file from path
-
   inode_t *dest_inode;
   dest_inode = malloc(sizeof(inode_t));
-  int result = find_file_from_path(volume, path, dest_inode);
-  if (result != 0) {
-    // need to do more explicitly with fields
-    // set fi -> - 1 ?
-    //stbuf = dest_inode;
+  int inode_no = find_file_from_path(volume, path, dest_inode);
+  if (inode_no != 0) {
+    fi->fh = inode_no;
+    free(dest_inode);
     return 0;
-  } else {
-    return -ENOSYS;
+  } else if ((dest_inode->i_mode >> 12) == 4) {
+    return EISDIR;
   }
-
-  /* TO BE COMPLETED BY THE STUDENT */
-  return -ENOSYS; // Function not implemented
+  return -ENOENT; 
 }
 
 /* ext2_release: Function called when a process closes a file in the
@@ -243,7 +243,7 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
   dest_inode = malloc(sizeof(inode_t));
   int inode_num = find_file_from_path(volume, path, dest_inode);
 
-  if ((dest_inode->i_mode >> 12) != 4)
+  if ((dest_inode->i_mode >> 12) == 4)
     return -EISDIR;
   if (inode_num == 0)
     return -ENOENT;
