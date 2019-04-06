@@ -136,18 +136,9 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
  */
 static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi) {
-  /* inode_t *dest_inode;
-  dest_inode = malloc(sizeof(inode_t));
-  int result = find_file_from_path(volume, path, dest_inode);
-  if (result != 0) {
-      follow_directory_entries(volume, &dest_inode, volume, NULL, filler_helper);
-  // follow_directory_entries(volume_t *volume, inode_t *inode, void *context,
-  //         dir_entry_t *buffer,
-  //         int (*f)(const char *name, uint32_t inode_no, void *context))
-    return 0;
-  } else {
-    return -ENOSYS;
-    }*/
+
+  
+
   return -ENOSYS;
 
 }
@@ -280,5 +271,6 @@ static int ext2_readlink(const char *path, char *buf, size_t size) {
   dest_inode = malloc(sizeof(inode_t));
   find_file_from_path(volume, path, dest_inode);
   /* TO BE COMPLETED BY THE STUDENT */
+
   return -ENOSYS; // Function not implemented
 }
