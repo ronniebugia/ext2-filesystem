@@ -1,0 +1,163 @@
+Volume name           : Large313
+Last mounted on       : /media/floppy
+File system version   : 1.0
+Total size (in bytes) : 2684354560
+Block size (in bytes) : 4096
+Total number of blocks: 655360
+Total number of inodes: 163840
+No of reserved blocks : 32768
+Blocks per group      : 32768
+Inodes per group      : 8192
+
+== BLOCK GROUP 0 ==
+Number of free blocks : 32075
+Number of free inodes : 8176
+No of directory inodes: 2
+
+== BLOCK GROUP 1 ==
+Number of free blocks : 32507
+Number of free inodes : 8190
+No of directory inodes: 1
+
+== BLOCK GROUP 2 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 3 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 4 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 5 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 6 ==
+Number of free blocks : 32504
+Number of free inodes : 8190
+No of directory inodes: 1
+
+== BLOCK GROUP 7 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 8 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 9 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 10 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 11 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 12 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 13 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 14 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 15 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 16 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 17 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+== BLOCK GROUP 18 ==
+Number of free blocks : 32507
+Number of free inodes : 8191
+No of directory inodes: 1
+
+== BLOCK GROUP 19 ==
+Number of free blocks : 32508
+Number of free inodes : 8192
+No of directory inodes: 0
+
+Root directory:
+  Inode number: 0x2
+  Mode        : 040755
+  Size        : 4096
+  Blocks      : 8
+  Entries:
+         0x2: .
+         0x2: ..
+         0xb: lost+found
+         0xc: Sparse.img
+         0xd: sp.c
+         0xe: a.out
+     0x24001: flp
+      0x2001: problem
+        0x11: floppy.img
+         0xf: Symbol
+      0xc001: DirInode49153
+
+Directory d1:
+  NOT FOUND!!!
+
+Directory d1/d2:
+  NOT FOUND!!!
+
+Directory d1/d2/d3/d4/d5:
+  NOT FOUND!!!
+
+File termcap:
+  NOT FOUND!!!
+
+File d1/File1.txt:
+  NOT FOUND!!!
+
+File d1/d2/sparse/Bigfile2.txt:
+  NOT FOUND!!!
+
+Symlink ImageInst.txt:
+  NOT FOUND!!!
+
+Full list of files:
+/ (blocks: 0:260)
+  /lost+found (blocks: 0:261 1:262 2:263 3:264)
+  /Sparse.img (blocks: 0:512 1:513 2:514 3:515 4:516 5:517 6:518 7:519 8:520 9:521 1-IND:265 2-IND:266)
+  /sp.c (blocks: 0:2566)
+  /a.out (blocks: 0:2567 1:2568 2:2569 3:2570 4:2571)
+  /flp (blocks: 0:590084)
+  /problem (blocks: 0:33028)
+    /foo (blocks: 0:7303014)
+  /floppy.img (blocks: 0:288 1:321 2:322 3:323 4:324 5:1061 6:1062 7:1063 1-IND:360)
+  /Symbol (blocks: 0:289)
+  /DirInode49153 (blocks: 0:196868)
+    /RFC 1149 - Standard for the transmission of IP datagrams on avian carriers.html (blocks: 0:197120 1:197121 2:197122)

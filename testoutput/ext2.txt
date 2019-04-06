@@ -1,0 +1,531 @@
+Volume name           : 
+Last mounted on       : /media/ext2
+File system version   : 1.0
+Total size (in bytes) : 5242880
+Block size (in bytes) : 1024
+Total number of blocks: 5120
+Total number of inodes: 1280
+No of reserved blocks : 256
+Blocks per group      : 8192
+Inodes per group      : 1280
+
+== BLOCK GROUP 0 ==
+Number of free blocks : 3652
+Number of free inodes : 1040
+No of directory inodes: 12
+
+Root directory:
+  Inode number: 0x2
+  Mode        : 040755
+  Size        : 1024
+  Blocks      : 2
+  Entries:
+         0x2: .
+         0x2: ..
+         0xb: lost+found
+         0xc: termcap
+         0xd: d1
+        0x12: ARM
+        0x15: Rules for writing numbers on cover page.pptx
+
+Directory d1:
+  Inode number: 0xd
+  Mode        : 040755
+  Size        : 1024
+  Blocks      : 2
+  Entries:
+         0xd: .
+         0x2: ..
+         0xe: bitshortage.html
+         0xc: termcap
+         0xf: File1.txt
+        0x10: Calendars
+        0x16: UBC-logo-2018-fullsig-blue-rgb300.png
+        0x17: d2
+
+Directory d1/d2:
+  Inode number: 0x17
+  Mode        : 040757
+  Size        : 1024
+  Blocks      : 2
+  Entries:
+        0x17: .
+         0xd: ..
+        0x18: empty[1]
+        0x19: d3
+
+Directory d1/d2/d3/d4/d5:
+  Inode number: 0x1b
+  Mode        : 040755
+  Size        : 5120
+  Blocks      : 10
+  Entries:
+        0x1b: .
+        0x1a: ..
+        0x1c: empty1
+        0x37: empty10
+        0x3a: empty11
+        0x3d: empty12
+        0x40: empty13
+        0x43: empty14
+        0x46: empty15
+        0x49: empty16
+        0x4c: empty17
+        0x4f: empty18
+        0x52: empty19
+        0x1f: empty2
+        0x55: empty20
+        0x58: empty21
+        0x5b: empty22
+        0x5e: empty23
+        0x61: empty24
+        0x64: empty25
+        0x67: empty26
+        0x6a: empty27
+        0x6d: empty28
+        0x70: empty29
+        0x22: empty3
+        0x73: empty30
+        0x25: empty4
+        0x28: empty5
+        0x2b: empty6
+        0x2e: empty7
+        0x31: empty8
+        0x34: empty9
+        0x1e: emptyWithNothing1
+        0x39: emptyWithNothing10
+        0x3c: emptyWithNothing11
+        0x3f: emptyWithNothing12
+        0x42: emptyWithNothing13
+        0x45: emptyWithNothing14
+        0x48: emptyWithNothing15
+        0x4b: emptyWithNothing16
+        0x4e: emptyWithNothing17
+        0x51: emptyWithNothing18
+        0x54: emptyWithNothing19
+        0x21: emptyWithNothing2
+        0x57: emptyWithNothing20
+        0x5a: emptyWithNothing21
+        0x5d: emptyWithNothing22
+        0x60: emptyWithNothing23
+        0x63: emptyWithNothing24
+        0x66: emptyWithNothing25
+        0x1d: emptyZ1
+        0x69: emptyWithNothing26
+        0x6c: emptyWithNothing27
+        0x6f: emptyWithNothing28
+        0x72: emptyWithNothing29
+        0x24: emptyWithNothing3
+        0x75: emptyWithNothing30
+        0x27: emptyWithNothing4
+        0x2a: emptyWithNothing5
+        0x2d: emptyWithNothing6
+        0x30: emptyWithNothing7
+        0x33: emptyWithNothing8
+        0x36: emptyWithNothing9
+        0x38: emptyZ10
+        0x3b: emptyZ11
+        0x3e: emptyZ12
+        0x41: emptyZ13
+        0x44: emptyZ14
+        0x47: emptyZ15
+        0x4a: emptyZ16
+        0x4d: emptyZ17
+        0x50: emptyZ18
+        0x53: emptyZ19
+        0x20: emptyZ2
+        0x56: emptyZ20
+        0x59: emptyZ21
+        0x5c: emptyZ22
+        0x5f: emptyZ23
+        0x62: emptyZ24
+        0x65: emptyZ25
+        0x68: emptyZ26
+        0x6b: emptyZ27
+        0x6e: emptyZ28
+        0x71: emptyZ29
+        0x23: emptyZ3
+        0x74: emptyZ30
+        0x26: emptyZ4
+        0x29: emptyZ5
+        0x2c: emptyZ6
+        0x2f: emptyZ7
+        0x32: emptyZ8
+        0x35: emptyZ9
+        0x76: fileEmpty1
+        0x77: fileEmptyZ1
+        0x78: fileEmptyZZ1
+        0x79: fileEMPTY1
+        0x7a: fileEmpty2
+        0x7b: fileEmptyZ2
+        0x7c: fileEmptyZZ2
+        0x7d: fileEMPTY2
+        0x7e: fileEmpty3
+        0x7f: fileEmptyZ3
+        0x80: fileEmptyZZ3
+        0x81: fileEMPTY3
+        0x82: fileEmpty4
+        0x83: fileEmptyZ4
+        0x84: fileEmptyZZ4
+        0x85: fileEMPTY4
+        0x86: fileEmpty5
+        0x87: fileEmptyZ5
+        0x88: fileEmptyZZ5
+        0x89: fileEMPTY5
+        0x8a: fileEmpty6
+        0x8b: fileEmptyZ6
+        0x8c: fileEmptyZZ6
+        0x8d: fileEMPTY6
+        0x8e: fileEmpty7
+        0x8f: fileEmptyZ7
+        0x90: fileEmptyZZ7
+        0x91: fileEMPTY7
+        0x92: fileEmpty8
+        0x93: fileEmptyZ8
+        0x94: fileEmptyZZ8
+        0x95: fileEMPTY8
+        0x96: fileEmpty9
+        0x97: fileEmptyZ9
+        0x98: fileEmptyZZ9
+        0x99: fileEMPTY9
+        0x9a: fileEmpty10
+        0x9b: fileEmptyZ10
+        0x9c: fileEmptyZZ10
+        0x9d: fileEMPTY10
+        0x9e: fileEmpty11
+        0x9f: fileEmptyZ11
+        0xa0: fileEmptyZZ11
+        0xa1: fileEMPTY11
+        0xa2: fileEmpty12
+        0xa3: fileEmptyZ12
+        0xa4: fileEmptyZZ12
+        0xa5: fileEMPTY12
+        0xa6: fileEmpty13
+        0xa7: fileEmptyZ13
+        0xa8: fileEmptyZZ13
+        0xa9: fileEMPTY13
+        0xaa: fileEmpty14
+        0xab: fileEmptyZ14
+        0xac: fileEmptyZZ14
+        0xad: fileEMPTY14
+        0xae: fileEmpty15
+        0xaf: fileEmptyZ15
+        0xb0: fileEmptyZZ15
+        0xb1: fileEMPTY15
+        0xb2: fileEmpty16
+        0xb3: fileEmptyZ16
+        0xb4: fileEmptyZZ16
+        0xb5: fileEMPTY16
+        0xb6: fileEmpty17
+        0xb7: fileEmptyZ17
+        0xb8: fileEmptyZZ17
+        0xb9: fileEMPTY17
+        0xba: fileEmpty18
+        0xbb: fileEmptyZ18
+        0xbc: fileEmptyZZ18
+        0xbd: fileEMPTY18
+        0xbe: fileEmpty19
+        0xbf: fileEmptyZ19
+        0xc0: fileEmptyZZ19
+        0xc1: fileEMPTY19
+        0xc2: fileEmpty20
+        0xc3: fileEmptyZ20
+        0xc4: fileEmptyZZ20
+        0xc5: fileEMPTY20
+        0xc6: fileEmpty21
+        0xc7: fileEmptyZ21
+        0xc8: fileEmptyZZ21
+        0xc9: fileEMPTY21
+        0xca: fileEmpty22
+        0xcb: fileEmptyZ22
+        0xcc: fileEmptyZZ22
+        0xcd: fileEMPTY22
+        0xce: fileEmpty23
+        0xcf: fileEmptyZ23
+        0xd0: fileEmptyZZ23
+        0xd1: fileEMPTY23
+        0xd2: fileEmpty24
+        0xd3: fileEmptyZ24
+        0xd4: fileEmptyZZ24
+        0xd5: fileEMPTY24
+        0xd6: fileEmpty25
+        0xd7: fileEmptyZ25
+        0xd8: fileEmptyZZ25
+        0xd9: fileEMPTY25
+        0xda: fileEmpty26
+        0xdb: fileEmptyZ26
+        0xdc: fileEmptyZZ26
+        0xdd: fileEMPTY26
+        0xde: fileEmpty27
+        0xdf: fileEmptyZ27
+        0xe0: fileEmptyZZ27
+        0xe1: fileEMPTY27
+        0xe2: fileEmpty28
+        0xee: d6
+        0xe3: fileEmptyZ28
+        0xe4: fileEmptyZZ28
+        0xe5: fileEMPTY28
+        0xe6: fileEmpty29
+        0xe7: fileEmptyZ29
+        0xe8: fileEmptyZZ29
+        0xe9: fileEMPTY29
+        0xea: fileEmpty30
+        0xeb: fileEmptyZ30
+        0xec: fileEmptyZZ30
+        0xed: fileEMPTY30
+        0xef: d7
+        0xf0: d8
+
+File termcap:
+  Inode number: 0xc
+  Mode        : 0100644
+  Size        : 1092917
+  Blocks      : 2148
+
+File d1/File1.txt:
+  Inode number: 0xf
+  Mode        : 0100644
+  Size        : 51
+  Blocks      : 2
+  Content     : This is a really short file with one line of text.
+
+
+File d1/d2/sparse/Bigfile2.txt:
+  NOT FOUND!!!
+
+Symlink ImageInst.txt:
+  NOT FOUND!!!
+
+Full list of files:
+/ (blocks: 0:165)
+  /lost+found (blocks: 0:166 1:167 2:168 3:169 4:170 5:171 6:172 7:173 8:174 9:175 10:176 11:177)
+  /termcap (blocks: 0:513 1:514 2:515 3:516 4:517 5:518 6:519 7:520 8:521 9:522 10:523 11:524 1-IND:178 2-IND:179)
+  /d1 (blocks: 0:184)
+    /bitshortage.html (blocks: 0:529 1:530 2:531 3:532 4:533)
+    /termcap (blocks: 0:513 1:514 2:515 3:516 4:517 5:518 6:519 7:520 8:521 9:522 10:523 11:524 1-IND:178 2-IND:179)
+    /File1.txt (blocks: 0:534)
+    /Calendars (blocks: 0:2093)
+      /2019_4up.pdf (blocks: 0:535 1:536 2:537 3:538 4:539 5:540 6:541 7:542 8:543)
+    /UBC-logo-2018-fullsig-blue-rgb300.png (blocks: 0:563 1:564 2:565 3:566 4:567 5:568 6:569 7:570 8:571 9:572 10:573 11:574 1-IND:414)
+    /d2 (blocks: 0:2096)
+      /empty[1] (blocks:)
+      /d3 (blocks: 0:415)
+        /d4 (blocks: 0:416 1:186)
+          /d5 (blocks: 0:185 1:187 2:188 3:189 4:190)
+            /empty1 (blocks:)
+            /empty10 (blocks:)
+            /empty11 (blocks:)
+            /empty12 (blocks:)
+            /empty13 (blocks:)
+            /empty14 (blocks:)
+            /empty15 (blocks:)
+            /empty16 (blocks:)
+            /empty17 (blocks:)
+            /empty18 (blocks:)
+            /empty19 (blocks:)
+            /empty2 (blocks:)
+            /empty20 (blocks:)
+            /empty21 (blocks:)
+            /empty22 (blocks:)
+            /empty23 (blocks:)
+            /empty24 (blocks:)
+            /empty25 (blocks:)
+            /empty26 (blocks:)
+            /empty27 (blocks:)
+            /empty28 (blocks:)
+            /empty29 (blocks:)
+            /empty3 (blocks:)
+            /empty30 (blocks:)
+            /empty4 (blocks:)
+            /empty5 (blocks:)
+            /empty6 (blocks:)
+            /empty7 (blocks:)
+            /empty8 (blocks:)
+            /empty9 (blocks:)
+            /emptyWithNothing1 (blocks:)
+            /emptyWithNothing10 (blocks:)
+            /emptyWithNothing11 (blocks:)
+            /emptyWithNothing12 (blocks:)
+            /emptyWithNothing13 (blocks:)
+            /emptyWithNothing14 (blocks:)
+            /emptyWithNothing15 (blocks:)
+            /emptyWithNothing16 (blocks:)
+            /emptyWithNothing17 (blocks:)
+            /emptyWithNothing18 (blocks:)
+            /emptyWithNothing19 (blocks:)
+            /emptyWithNothing2 (blocks:)
+            /emptyWithNothing20 (blocks:)
+            /emptyWithNothing21 (blocks:)
+            /emptyWithNothing22 (blocks:)
+            /emptyWithNothing23 (blocks:)
+            /emptyWithNothing24 (blocks:)
+            /emptyWithNothing25 (blocks:)
+            /emptyZ1 (blocks:)
+            /emptyWithNothing26 (blocks:)
+            /emptyWithNothing27 (blocks:)
+            /emptyWithNothing28 (blocks:)
+            /emptyWithNothing29 (blocks:)
+            /emptyWithNothing3 (blocks:)
+            /emptyWithNothing30 (blocks:)
+            /emptyWithNothing4 (blocks:)
+            /emptyWithNothing5 (blocks:)
+            /emptyWithNothing6 (blocks:)
+            /emptyWithNothing7 (blocks:)
+            /emptyWithNothing8 (blocks:)
+            /emptyWithNothing9 (blocks:)
+            /emptyZ10 (blocks:)
+            /emptyZ11 (blocks:)
+            /emptyZ12 (blocks:)
+            /emptyZ13 (blocks:)
+            /emptyZ14 (blocks:)
+            /emptyZ15 (blocks:)
+            /emptyZ16 (blocks:)
+            /emptyZ17 (blocks:)
+            /emptyZ18 (blocks:)
+            /emptyZ19 (blocks:)
+            /emptyZ2 (blocks:)
+            /emptyZ20 (blocks:)
+            /emptyZ21 (blocks:)
+            /emptyZ22 (blocks:)
+            /emptyZ23 (blocks:)
+            /emptyZ24 (blocks:)
+            /emptyZ25 (blocks:)
+            /emptyZ26 (blocks:)
+            /emptyZ27 (blocks:)
+            /emptyZ28 (blocks:)
+            /emptyZ29 (blocks:)
+            /emptyZ3 (blocks:)
+            /emptyZ30 (blocks:)
+            /emptyZ4 (blocks:)
+            /emptyZ5 (blocks:)
+            /emptyZ6 (blocks:)
+            /emptyZ7 (blocks:)
+            /emptyZ8 (blocks:)
+            /emptyZ9 (blocks:)
+            /fileEmpty1 (blocks:)
+            /fileEmptyZ1 (blocks:)
+            /fileEmptyZZ1 (blocks:)
+            /fileEMPTY1 (blocks:)
+            /fileEmpty2 (blocks:)
+            /fileEmptyZ2 (blocks:)
+            /fileEmptyZZ2 (blocks:)
+            /fileEMPTY2 (blocks:)
+            /fileEmpty3 (blocks:)
+            /fileEmptyZ3 (blocks:)
+            /fileEmptyZZ3 (blocks:)
+            /fileEMPTY3 (blocks:)
+            /fileEmpty4 (blocks:)
+            /fileEmptyZ4 (blocks:)
+            /fileEmptyZZ4 (blocks:)
+            /fileEMPTY4 (blocks:)
+            /fileEmpty5 (blocks:)
+            /fileEmptyZ5 (blocks:)
+            /fileEmptyZZ5 (blocks:)
+            /fileEMPTY5 (blocks:)
+            /fileEmpty6 (blocks:)
+            /fileEmptyZ6 (blocks:)
+            /fileEmptyZZ6 (blocks:)
+            /fileEMPTY6 (blocks:)
+            /fileEmpty7 (blocks:)
+            /fileEmptyZ7 (blocks:)
+            /fileEmptyZZ7 (blocks:)
+            /fileEMPTY7 (blocks:)
+            /fileEmpty8 (blocks:)
+            /fileEmptyZ8 (blocks:)
+            /fileEmptyZZ8 (blocks:)
+            /fileEMPTY8 (blocks:)
+            /fileEmpty9 (blocks:)
+            /fileEmptyZ9 (blocks:)
+            /fileEmptyZZ9 (blocks:)
+            /fileEMPTY9 (blocks:)
+            /fileEmpty10 (blocks:)
+            /fileEmptyZ10 (blocks:)
+            /fileEmptyZZ10 (blocks:)
+            /fileEMPTY10 (blocks:)
+            /fileEmpty11 (blocks:)
+            /fileEmptyZ11 (blocks:)
+            /fileEmptyZZ11 (blocks:)
+            /fileEMPTY11 (blocks:)
+            /fileEmpty12 (blocks:)
+            /fileEmptyZ12 (blocks:)
+            /fileEmptyZZ12 (blocks:)
+            /fileEMPTY12 (blocks:)
+            /fileEmpty13 (blocks:)
+            /fileEmptyZ13 (blocks:)
+            /fileEmptyZZ13 (blocks:)
+            /fileEMPTY13 (blocks:)
+            /fileEmpty14 (blocks:)
+            /fileEmptyZ14 (blocks:)
+            /fileEmptyZZ14 (blocks:)
+            /fileEMPTY14 (blocks:)
+            /fileEmpty15 (blocks:)
+            /fileEmptyZ15 (blocks:)
+            /fileEmptyZZ15 (blocks:)
+            /fileEMPTY15 (blocks:)
+            /fileEmpty16 (blocks:)
+            /fileEmptyZ16 (blocks:)
+            /fileEmptyZZ16 (blocks:)
+            /fileEMPTY16 (blocks:)
+            /fileEmpty17 (blocks:)
+            /fileEmptyZ17 (blocks:)
+            /fileEmptyZZ17 (blocks:)
+            /fileEMPTY17 (blocks:)
+            /fileEmpty18 (blocks:)
+            /fileEmptyZ18 (blocks:)
+            /fileEmptyZZ18 (blocks:)
+            /fileEMPTY18 (blocks:)
+            /fileEmpty19 (blocks:)
+            /fileEmptyZ19 (blocks:)
+            /fileEmptyZZ19 (blocks:)
+            /fileEMPTY19 (blocks:)
+            /fileEmpty20 (blocks:)
+            /fileEmptyZ20 (blocks:)
+            /fileEmptyZZ20 (blocks:)
+            /fileEMPTY20 (blocks:)
+            /fileEmpty21 (blocks:)
+            /fileEmptyZ21 (blocks:)
+            /fileEmptyZZ21 (blocks:)
+            /fileEMPTY21 (blocks:)
+            /fileEmpty22 (blocks:)
+            /fileEmptyZ22 (blocks:)
+            /fileEmptyZZ22 (blocks:)
+            /fileEMPTY22 (blocks:)
+            /fileEmpty23 (blocks:)
+            /fileEmptyZ23 (blocks:)
+            /fileEmptyZZ23 (blocks:)
+            /fileEMPTY23 (blocks:)
+            /fileEmpty24 (blocks:)
+            /fileEmptyZ24 (blocks:)
+            /fileEmptyZZ24 (blocks:)
+            /fileEMPTY24 (blocks:)
+            /fileEmpty25 (blocks:)
+            /fileEmptyZ25 (blocks:)
+            /fileEmptyZZ25 (blocks:)
+            /fileEMPTY25 (blocks:)
+            /fileEmpty26 (blocks:)
+            /fileEmptyZ26 (blocks:)
+            /fileEmptyZZ26 (blocks:)
+            /fileEMPTY26 (blocks:)
+            /fileEmpty27 (blocks:)
+            /fileEmptyZ27 (blocks:)
+            /fileEmptyZZ27 (blocks:)
+            /fileEMPTY27 (blocks:)
+            /fileEmpty28 (blocks:)
+            /d6 (blocks: 0:191)
+            /fileEmptyZ28 (blocks:)
+            /fileEmptyZZ28 (blocks:)
+            /fileEMPTY28 (blocks:)
+            /fileEmpty29 (blocks:)
+            /fileEmptyZ29 (blocks:)
+            /fileEmptyZZ29 (blocks:)
+            /fileEMPTY29 (blocks:)
+            /fileEmpty30 (blocks:)
+            /fileEmptyZ30 (blocks:)
+            /fileEmptyZZ30 (blocks:)
+            /fileEMPTY30 (blocks:)
+            /d7 (blocks: 0:192)
+            /d8 (blocks: 0:441)
+  /ARM (blocks: 0:2094)
+    /Hello World.c (blocks: 0:544 1:545)
+    /assembler.s (blocks: 0:546)
+  /Rules for writing numbers on cover page.pptx (blocks: 0:547 1:548 2:549 3:550 4:551 5:552 6:553 7:554 8:555 9:556 10:557 11:558 1-IND:2095)
