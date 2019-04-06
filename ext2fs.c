@@ -113,6 +113,21 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
   }
 }
 
+typedef struct filler_context {
+  int (*f)(void *buf, const char *name, const struct stat *stbuf, off_t off);
+  off_t offset;
+  void *buffer;
+} filler_context_t;
+
+int filler_helper(const char *name, uint32_t inode_no, void *context) {
+
+  filler_context_t *readdir_context = context;
+  printf("%s\n", name);
+  
+  readdir_context->f(readdir_context->buffer, name, NULL, readdir_context->offset);
+  return 0;
+}
+
 /* ext2_readdir: Function called when a process requests the listing
    of a directory.
    
@@ -137,7 +152,8 @@ static int ext2_getattr(const char *path, struct stat *stbuf) {
      In case of success, returns 0, and calls the filler function for
      each entry in the provided directory. If the directory doesn't
      exist, returns -ENOENT.
- */
+*/
+
 static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                          off_t offset, struct fuse_file_info *fi) {
 
@@ -150,20 +166,23 @@ static int ext2_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
   if (inode_num == 0 || (dir_inode->i_mode >> 12) != 4)
     return -ENOENT;
   
-  struct stat *stbuf;
-  stbuf = malloc(sizeof(struct stat));
-  ext2_getattr(path, stbuf);
-  
-  int filler_wrapper(const char *name, uint32_t inode_no, void *context) {
-    printf("%s\n", name);
-    printf("inode no: %d\n", inode_no);
+  /*filler_context_t *context;
+  context = malloc(sizeof(filler_context_t));
+  context->f = filler;
+  context->offset = offset;
+  context->buffer = &buf;
+  */
+
+  int filler_helper(const char *name, uint32_t inode_no, void *context) {
     filler(buf, name, NULL, 0);
     return 0;
   }
   
-  int res = follow_directory_entries(volume, dir_inode, NULL, NULL, filler_wrapper);
+  int res = follow_directory_entries(volume, dir_inode, NULL, NULL, filler_helper);
   printf("end of readdir\n");
 
+  free(dir_inode);
+  //free(context);
   
   if (res == 0)
     return -ENOENT;
@@ -258,13 +277,19 @@ static int ext2_read(const char *path, char *buf, size_t size, off_t offset,
   dest_inode = malloc(sizeof(inode_t));
   int inode_num = find_file_from_path(volume, path, dest_inode);
 
-  if ((dest_inode->i_mode >> 12) == 4)
+  if ((dest_inode->i_mode >> 12) == 4) {
+    free(dest_inode);
     return -EISDIR;
-  if (inode_num == 0)
+  }
+  if (inode_num == 0) {
+    free(dest_inode);
     return -ENOENT;
-
+  }
+  
   int bytes_read = read_file_content(volume, dest_inode, offset, size, buf);
 
+  free(dest_inode);
+  
   if (bytes_read >= 0)
     return bytes_read;
 
